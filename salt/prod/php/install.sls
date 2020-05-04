@@ -18,7 +18,7 @@ php-install:
       - php72w-pecl-redis
       - php72w-pecl-imagick
     - require:
-      - cmd: yum-source
+      - cmd: php-yum-source
       - cmd: php-remove
   service:
     - running
@@ -27,13 +27,22 @@ php-install:
     - reload: True
     - watch:
       - pkg: php-install
+      - file: /etc/php.ini
+
+/etc/php.ini:
+  file:
+    - managed
+    - source: salt://php/files/php.ini
+    - user: root
+    - mode: 755
+    - group: root
 
 
-yum-source:
+php-yum-source:
   cmd:
     - run
     - name: rpm -Uvh http://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-    - onlyif: test 8 -ge `yum search -q php71w 2>&1 |wc -l`
+    - onlyif: test 8 -ge `yum search -q php72w 2>&1 |wc -l`
 php-remove:
   cmd:
     - run

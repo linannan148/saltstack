@@ -9,3 +9,12 @@ nginx-install:
     - reload: True
     - watch:
       - pkg: nginx
+      - file: /etc/nginx/nginx.conf
+
+/etc/nginx/nginx.conf:
+  file:
+    - managed
+    - source: salt://nginx/files/nginx.conf
+    - user: root
+    - group: root
+    - mode: 755
